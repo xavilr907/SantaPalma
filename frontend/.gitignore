@@ -1,0 +1,59 @@
+# ===========================
+# 📦 Dependencias y builds
+# ===========================
+node_modules/
+dist/
+dist-ssr/
+build/
+coverage/
+
+# ===========================
+# ⚙️ Archivos de configuración locales
+# ===========================
+*.local
+.env
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# ===========================
+# 🧠 Logs y debug
+# ===========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ===========================
+# 🧩 Configuración del editor
+# ===========================
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+
+# ===========================
+# ⚙️ Archivos del sistema o cache
+# ===========================
+*.pid
+*.seed
+*.pid.lock
+*.tgz
+*.zip
+*.rar
+
+# ===========================
+# 🧰 Herramientas o extras (opcional)
+# ===========================
+.eslintcache
+.stylelintcache
