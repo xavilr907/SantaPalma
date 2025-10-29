@@ -68,3 +68,23 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Connecting to a Backend (development)
+
+To connect this frontend to a backend during development:
+
+1. Create a file named `.env` in the project root with the variable shown in `.env.example`:
+
+```text
+VITE_BACKEND_URL=http://localhost:4000
+```
+
+2. The Vite dev server proxies requests starting with `/api` to the backend configured by `VITE_BACKEND_URL`. For example, a frontend request to `/api/auth/login` will be proxied to `http://localhost:4000/auth/login`.
+
+3. Start the dev server:
+
+```powershell
+npm run dev
+```
+
+If you deploy to production, set the appropriate backend URL in your deployment environment and ensure the frontend makes requests to full URLs or configure your production server to handle proxying.
