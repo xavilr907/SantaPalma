@@ -1,11 +1,47 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { api, setToken } from "../api/client.js";
 
 
 export default function Login() {
   const nav = useNavigate();
   const [tab, setTab] = useState("login");
-  const submit = (e)=>{ e.preventDefault(); nav("/home"); };
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const submit = async (e)=>{
+    e.preventDefault();
+    setError(null)
+    setLoading(true)
+    try{
+      if(tab === 'login'){
+        // example: POST /api/auth/login with { email, password }
+        const form = new FormData(e.target)
+        // backend expects { correo, contrasena }
+        const payload = {
+          correo: form.get('email'),
+          contrasena: form.get('password')
+        }
+      // send to backend's login route
+            // avoid sending cookies for login (some backends reject stale session cookies)
+            const res = await api.post('/api/usuarios/login', payload, { credentials: 'omit', noAuth: true })
+      // backend responded with token (either raw string or { token })
+      const token = res && (res.token || res || '').toString()
+      if(token) setToken(token)
+    nav('/home')
+      } else {
+        // signup flow could be implemented similarly
+        nav('/home')
+      }
+    }catch(err){
+      // show richer error information (status + body) when available
+      console.error('login error', err)
+      const message = err && (err.data?.message || err.message || JSON.stringify(err.data) || 'Error')
+      setError(message)
+    }finally{
+      setLoading(false)
+    }
+  };
 
   return (
 
@@ -50,13 +86,14 @@ export default function Login() {
         {/* Formulario */}
         <form onSubmit={submit} className="space-y-3">
           {tab==="signup" && (
-            <input className="w-full border rounded-lg px-3 py-2" placeholder="Nombre" />
+            <input name="name" className="w-full border rounded-lg px-3 py-2" placeholder="Nombre" />
           )}
 
-          <input className="w-full border rounded-lg px-3 py-2" placeholder="Email" />
-          <input className="w-full border rounded-lg px-3 py-2" placeholder="Contraseña" type="password" />
-          <button className="w-full bg-brand-500 hover:bg-brand-600 text-white rounded-full py-3 font-semibold">
-            {tab==="login" ? "Log in" : "Registrarme"}
+          <input name="email" autoComplete="email" className="w-full border rounded-lg px-3 py-2" placeholder="Email" />
+          <input name="password" autoComplete="current-password" className="w-full border rounded-lg px-3 py-2" placeholder="Contraseña" type="password" />
+          {error && <div className="text-sm text-red-600">{error}</div>}
+          <button disabled={loading} className="w-full bg-brand-500 hover:bg-brand-600 text-white rounded-full py-3 font-semibold">
+            {loading ? 'Procesando...' : (tab==="login" ? "Log in" : "Registrarme")}
           </button>
         </form>
 
